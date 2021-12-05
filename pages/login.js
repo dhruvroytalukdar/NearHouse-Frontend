@@ -3,6 +3,8 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useAppContext } from "./auth";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 export default function Login() {
   const authuser = useAppContext();
@@ -28,7 +30,9 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (query.email.length > 0 && query.password.length > 0) {
+      NProgress.start();
       await signInWithEmailAndPassword(auth, query.email, query.password);
+      NProgress.done();
       router.push("/");
     }
   }

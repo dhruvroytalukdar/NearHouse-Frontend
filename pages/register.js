@@ -4,6 +4,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
 import { useRouter } from "next/router";
 import { useAppContext } from "./auth";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 export default function Register() {
   const storage = getStorage();
@@ -21,18 +23,30 @@ export default function Register() {
     id: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!query.name) setError((res) => res + " Name required ");
+    if (!query.email) setError((res) => res + " Email required ");
+    if (!query.phone) setError((res) => res + " Phone required ");
+    if (!query.password) setError((res) => res + " Password required ");
+
     if (
       query.name.length > 0 &&
       query.email.length > 0 &&
       query.phone.length > 0 &&
-      query.password.length > 0 &&
-      query.phone.length > 0
+      query.password.length > 0
     ) {
+      setError("");
+
+      NProgress.start();
+
       const storageRef = ref(storage, `${query.name}/image.jpg`);
       let url = "";
+
+      await createUserWithEmailAndPassword(auth, query.email, query.password);
 
       await uploadBytes(storageRef, query.userImage);
 
@@ -58,22 +72,17 @@ export default function Register() {
         ],
       };
 
-      let response = await fetch(
-        "https://i1ho5kfq.api.sanity.io/v2021-06-07/data/mutate/production",
-        {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization:
-              "Bearer skAl0p21xCw7PBFqB4uT73M5wNVYV0gnmWcPeT7GHnjeWIJWOY9K1EkoV5Gl2zdRo1Dh9uzt87Vx3KRU6sXY760QLYLtMim5fdHLXOJOg1FU91xVMIGAjaLYZoqky6dQgtPuvfZwCM5KtF4Waz4K6mNTEWVtDLfmqTcZNMd4RUd6LW6CfVv4",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      let result = await response.json();
-      console.log(result);
-      await createUserWithEmailAndPassword(auth, query.email, query.password);
+      let response = await fetch(process.env.NEXT_PUBLIC_API_PATH, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization:
+            "Bearer skAl0p21xCw7PBFqB4uT73M5wNVYV0gnmWcPeT7GHnjeWIJWOY9K1EkoV5Gl2zdRo1Dh9uzt87Vx3KRU6sXY760QLYLtMim5fdHLXOJOg1FU91xVMIGAjaLYZoqky6dQgtPuvfZwCM5KtF4Waz4K6mNTEWVtDLfmqTcZNMd4RUd6LW6CfVv4",
+        },
+        body: JSON.stringify(data),
+      });
+      await response.json();
+      NProgress.done();
       router.push("/");
     }
   }
@@ -96,7 +105,7 @@ export default function Register() {
   }
 
   return (
-    <div className="w-11/12 lg:w-8/12 height mx-auto flex items-center justify-center">
+    <div className="w-11/12 lg:w-8/12 height mx-auto flex flex-col items-center justify-center">
       <Head>
         <title>Register Page</title>
       </Head>
@@ -157,6 +166,13 @@ export default function Register() {
           </button>
         </div>
       </form>
+      {error ? (
+        <p className="p-1 mt-2 border-2 bg-red-200 text-red-500 font-bold">
+          {error}
+        </p>
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 }

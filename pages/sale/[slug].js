@@ -83,7 +83,9 @@ export default function Property({ data }) {
       </div>
       <div className="space-y-2 border-t-2 border-b-2 py-4">
         {data.estate.keyFeatures.map((feature) => (
-          <p className="text-sm font-semibold">&#10040; {feature}</p>
+          <p key={feature} className="text-sm font-semibold">
+            &#10040; {feature}
+          </p>
         ))}
       </div>
       <div className="border-b-2 py-4">
@@ -98,29 +100,27 @@ export default function Property({ data }) {
           review{isMultiple(data.estate.reviews.length)}
         </p>
         <div className="my-4 grid gap-4 lg:grid-cols-2 grid-cols-1">
-          {data.estate.reviews.map((review) => {
-            return (
-              <div key={review.traveller.name}>
-                <div className="flex">
-                  <img
-                    className="w-16 h-16 rounded-full"
-                    src={review.traveller.userImage}
-                    alt="traveller image"
-                  />
-                  <div className="flex flex-col justify-center ml-2">
-                    <p className="font-semibold">{review.traveller.name}</p>
-                    <p className="text-sm text-gray-700">
-                      {new Date(review.traveller.time).toLocaleDateString(
-                        "en-US",
-                        { month: "long", year: "numeric" }
-                      )}
-                    </p>
-                  </div>
+          {data.estate.reviews.map((review) => (
+            <div key={review.traveller.name}>
+              <div className="flex">
+                <img
+                  className="w-16 h-16 rounded-full"
+                  src={review.traveller.userImage}
+                  alt="traveller image"
+                />
+                <div className="flex flex-col justify-center ml-2">
+                  <p className="font-semibold">{review.traveller.name}</p>
+                  <p className="text-sm text-gray-700">
+                    {new Date(review.traveller.time).toLocaleDateString(
+                      "en-US",
+                      { month: "long", year: "numeric" }
+                    )}
+                  </p>
                 </div>
-                <p className="my-2">{review.thoughts.children.text}</p>
               </div>
-            );
-          })}
+              <p className="my-2">{review.thoughts.children.text}</p>
+            </div>
+          ))}
         </div>
       </div>
       <button className="p-4 bg-black text-white rounded-lg hover:bg-gray-300 hover:text-black">

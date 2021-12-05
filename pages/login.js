@@ -1,8 +1,8 @@
 import { getAuth, signInWithEmailAndPassword } from "@firebase/auth";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import { useAppContext } from "./auth";
+import { useState } from "react";
+import { useAppContext } from "../components/auth";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 

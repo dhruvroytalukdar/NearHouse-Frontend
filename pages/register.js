@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
 import { useRouter } from "next/router";
-import { useAppContext } from "./auth";
+import { useAppContext } from "../components/auth";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 

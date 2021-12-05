@@ -1,4 +1,4 @@
-import { useAppContext } from "../pages/auth";
+import { useAppContext } from "./auth";
 import { getAuth, signOut } from "firebase/auth";
 import { FaSignOutAlt, FaUser } from "react-icons/fa";
 import { useState } from "react";

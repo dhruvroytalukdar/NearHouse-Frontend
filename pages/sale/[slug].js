@@ -94,13 +94,13 @@ export default function Property({ data }) {
       <div className="py-4">
         <p className="text-lg font-bold">
           <img src="/svg/star.png" className="inline-block w-5 h-5 pb-1 mr-1" />
-          {getReviews(data.estate.reviews)} &#183; {data.estate.reviews.length}{" "}
+          {getReviews(data.estate.reviews)} &#183; {data.estate.reviews.length}
           review{isMultiple(data.estate.reviews.length)}
         </p>
         <div className="my-4 grid gap-4 lg:grid-cols-2 grid-cols-1">
           {data.estate.reviews.map((review) => {
             return (
-              <div>
+              <div id={review.traveller.name}>
                 <div className="flex">
                   <img
                     className="w-16 h-16 rounded-full"
